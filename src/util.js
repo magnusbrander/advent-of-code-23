@@ -1,12 +1,14 @@
 /**
  *
- * @param {string} result
+ * @param {string[]} results
  * @param {number} day
  */
-function printResult(result, day) {
+function printResults(results, day) {
   console.log("\n");
-  console.log(`The solution to day ${day} is: `, result);
+  for (let i = 0; i < results.length; i++) {
+    console.log(`The solution to day ${day}, part ${i + 1} is: `, results[i]);
+  }
   console.log("\n");
 }
 
-export { printResult };
+export { printResults };

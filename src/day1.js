@@ -24,44 +24,179 @@ In this example, the calibration values of these four lines are 12, 38, 15, and 
 
 Consider your entire calibration document. What is the sum of all of the calibration values?
 
+--- Part Two ---
+Your calculation isn't quite right. It looks like some of the digits are actually spelled out with letters: one, two, three, four, five, six, seven, eight, and nine also count as valid "digits".
+
+Equipped with this new information, you now need to find the real first and last digit on each line. For example:
+
+two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen
+In this example, the calibration values are 29, 83, 13, 24, 42, 14, and 76. Adding these together produces 281.
+
+What is the sum of all of the calibration values?
+
 */
+
+/**
+ *
+ * @param {string[]} rows
+ * @returns {string[]}
+ */
+function getResultDay1(rows) {
+  const part1 = getResultPart1(rows);
+  const part2 = getResultPart2(rows);
+  return [part1, part2];
+}
+
+/** @type {string[]} */
+const possibleCharDigits = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+/** @type {string[]} */
+const possibleTextDigits = [
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+];
 
 /**
  *
  * @param {string[]} rows
  * @returns {string}
  */
-function getResultDay1(rows) {
-  /** @type {number[]} */
-  const calibrations = [];
-  for (const row of rows) {
-    let firstDigit = 0;
-    for (let i = 0; i < row.length; i++) {
-      const char = row[i];
-      const int = parseInt(char, 10);
-      if (!isNaN(int)) {
-        firstDigit = int;
-        break;
-      }
-    }
-    let lastDigit = 0;
-    for (let i = row.length - 1; i > -1; i--) {
-      const char = row[i];
-      const int = parseInt(char, 10);
-      if (!isNaN(int)) {
-        lastDigit = int;
-        break;
-      }
-    }
-    const calibration = 10 * firstDigit + lastDigit;
-    calibrations.push(calibration);
-  }
-
+function getResultPart1(rows) {
   let sum = 0;
-  for (const value of calibrations) {
-    sum += value;
+  for (const row of rows) {
+    const firstMatch = getFirstDigitMatch(row, possibleCharDigits);
+    const lastMatch = getLastDigitIndex(row, possibleCharDigits);
+    if (firstMatch === null || lastMatch === null) {
+      continue;
+    }
+    const firstDigit = firstMatch.digitIndex + 1;
+    const lastDigit = lastMatch.digitIndex + 1;
+    const calibration = firstDigit * 10 + lastDigit;
+    sum += calibration;
   }
   return String(sum);
+}
+
+/**
+ *
+ * @param {string[]} rows
+ * @returns {string}
+ */
+function getResultPart2(rows) {
+  let sum = 0;
+  for (const row of rows) {
+    const firstCharDigitMatch = getFirstDigitMatch(row, possibleCharDigits);
+    const firstTextDigitMatch = getFirstDigitMatch(row, possibleTextDigits);
+    const lastCharDigitMatch = getLastDigitIndex(row, possibleCharDigits);
+    const lastTextDigitMatch = getLastDigitIndex(row, possibleTextDigits);
+    const firstMatch = getFirstMatch(firstCharDigitMatch, firstTextDigitMatch);
+    const lastMatch = getLastMatch(lastCharDigitMatch, lastTextDigitMatch);
+    if (firstMatch === null || lastMatch === null) {
+      continue;
+    }
+    const firstDigit = firstMatch.digitIndex + 1;
+    const lastDigit = lastMatch.digitIndex + 1;
+    const calibration = firstDigit * 10 + lastDigit;
+    sum += calibration;
+  }
+  return String(sum);
+}
+
+/**
+ * @typedef {{digitIndex: number, matchIndex: number}} Match
+ */
+
+/**
+ *
+ * @param {string} txt
+ * @param {string[]} digitStrings
+ * @returns {Match|null}
+ */
+function getFirstDigitMatch(txt, digitStrings) {
+  /** @type {Match|null} */
+  let firstMatch = null;
+  for (let digitIndex = 0; digitIndex < digitStrings.length; digitIndex++) {
+    const digitString = digitStrings[digitIndex];
+    const matchIndex = txt.indexOf(digitString);
+    if (matchIndex === -1) {
+      continue;
+    }
+    if (firstMatch === null) {
+      firstMatch = { digitIndex, matchIndex };
+    } else if (firstMatch.matchIndex > matchIndex) {
+      firstMatch = { digitIndex, matchIndex };
+    }
+  }
+  return firstMatch;
+}
+
+/**
+ *
+ * @param {string} txt
+ * @param {string[]} digitStrings
+ * @returns {Match|null}
+ */
+function getLastDigitIndex(txt, digitStrings) {
+  /** @type {Match|null} */
+  let lastMatch = null;
+  for (let digitIndex = 0; digitIndex < digitStrings.length; digitIndex++) {
+    const digitString = digitStrings[digitIndex];
+    const matchIndex = txt.lastIndexOf(digitString);
+    if (matchIndex === -1) {
+      continue;
+    }
+    if (lastMatch === null) {
+      lastMatch = { digitIndex, matchIndex };
+    } else if (lastMatch.matchIndex < matchIndex) {
+      lastMatch = { digitIndex, matchIndex };
+    }
+  }
+  return lastMatch;
+}
+
+/**
+ *
+ * @param {Match|null} match1
+ * @param {Match|null} match2
+ * @returns {Match|null}
+ */
+function getFirstMatch(match1, match2) {
+  if (match1 === null) {
+    return match2;
+  }
+  if (match2 === null) {
+    return match1;
+  }
+  return match1.matchIndex < match2.matchIndex ? match1 : match2;
+}
+
+/**
+ *
+ * @param {Match|null} match1
+ * @param {Match|null} match2
+ * @returns {Match|null}
+ */
+function getLastMatch(match1, match2) {
+  if (match1 === null) {
+    return match2;
+  }
+  if (match2 === null) {
+    return match1;
+  }
+  return match1.matchIndex > match2.matchIndex ? match1 : match2;
 }
 
 export { getResultDay1 };
