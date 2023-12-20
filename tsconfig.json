@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ESNEXT",
+    "module": "nodenext",
+    "strict": true /* Enable strict mode */,
+    "esModuleInterop": true /* Allow default imports from modules with no default export */,
+    "skipLibCheck": true /* Skip type checking of declaration files */,
+    "forceConsistentCasingInFileNames": true /* Enforce consistent casing in file names */,
+    "allowJs": true,
+    "checkJs": true,
+    "typeRoots": ["./node_modules/@types"],
+    "moduleResolution": "nodenext",
+    "outDir": "./dist/",
+    "declaration": true,
+    "pretty": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictBindCallApply": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
+  },
+  "include": ["src/**/*.js"],
+  "exclude": ["node_modules"]
+}

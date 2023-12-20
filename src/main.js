@@ -8,7 +8,7 @@ console.log("--------------------\n");
 console.time("Total solution time");
 
 // Day 1
-const rowsDay1 = readFileRows("./day1.txt");
+const rowsDay1 = readFileRows("./src/day1.txt");
 const resultDay1 = getResultDay1(rowsDay1);
 printResult(resultDay1, 1);
 
