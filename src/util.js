@@ -11,4 +11,17 @@ function printResults(results, day) {
   console.log("\n");
 }
 
-export { printResults };
+/**
+ *
+ * @param {Iterable<number>} numbers
+ * @returns {number}
+ */
+function getSum(numbers) {
+  let sum = 0;
+  for (const number of numbers) {
+    sum += number;
+  }
+  return sum;
+}
+
+export { printResults, getSum };
